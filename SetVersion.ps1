@@ -53,6 +53,6 @@ function SetVersion
 
 $LOCATION = "$(Get-Location)"
 
-SetVersion("$LOCATION\UpdateBindingOnInterval.csproj")
+SetVersion("$LOCATION\XamlTimers.csproj")
 
 "SetVersion.ps1 Finished."
