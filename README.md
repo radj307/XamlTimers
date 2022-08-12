@@ -7,8 +7,10 @@ You can toggle the timers at any time; or even bind the `EnableTimer` property t
 
 Requires Microsoft's WPF Behaviors NuGet package:  
 
- - [`Microsoft.Xaml.Behaviors.Wpf`](https://www.nuget.org/packages/Microsoft.Xaml.Behaviors.Wpf) &nbsp;&nbsp;&nbsp; *(XAML Namespace: `http://schemas.microsoft.com/xaml/behaviors`)*
-
+ - `Microsoft.Xaml.Behaviors.Wpf` *([GitHub](https://github.com/Microsoft/XamlBehaviorsWpf), [NuGet](https://www.nuget.org/packages/Microsoft.Xaml.Behaviors.Wpf))*
+ 
+To use the above package in XAML, add this namespace to your Window:  
+`http://schemas.microsoft.com/xaml/behaviors`
 
 ## Namespace
 
@@ -30,13 +32,13 @@ xmlns:behavior="clr-namespace:XamlTimers;assembly=XamlTimers"
 
 #### Properties
 
-| Property        | Default | Description |
-|-----------------|---------|-------------|
-| `EnableTimer`   | `true`  | When `true`, the timer is enabled & the specified binding is updated every time the `Interval` has elapsed;<br/>When `false`, the timer is disabled & no updates occur. |
-| `Interval`      |         | The timer interval, in milliseconds. *(type `double`)* |
-| `Property`      |         | The `DependencyProperty` on the attached object to update the databindings of. If the specified property doesn't exist on the attached object, nothing happens.<br/>This should be specified in the form `"{x:Static <CONTROL>.<PROPERTYNAME>Property}"`. |
-| `ThrowWhenPropertyIsNull` | `true` | When `true`, an `ArgumentNullException` is thrown by the update method when `Property` is `null`; when `false`, no exception is thrown and the binding update silently fails. |
-| `ThrowWhenPropertyIsMissing` | `true` | When `true`, an `ArgumentNullException` is thrown by the update method when `Property` doesn't exist on the attached object; when `false`, no exception is thrown and the binding update silently fails. |
+| Property        | Type | Default Value | Description |
+|-----------------|------|---------|-------------|
+| `EnableTimer`   | `bool` | `true`  | When `true`, the timer is enabled & the specified binding is updated every time the `Interval` has elapsed;<br/>When `false`, the timer is disabled & no updates occur. |
+| `Interval`      | `double` |         | The timer interval, in milliseconds. |
+| `Property`      | `DependencyProperty` |         | Specifies the target property of the attached object to update the databinding on.<br/>This should be specified in the form `"{x:Static <CONTROL>.<PROPERTYNAME>Property}"`, where the `<CONTROL>` is the control that *defines* the property, **not the control that inherits it**.<br/> *(i.e. `Slider.Value` => `RangeBase.ValueProperty`)* |
+| `ThrowWhenPropertyIsNull` | `bool` | `true` | When `true`, an `ArgumentNullException` is thrown by the update method when `Property` is `null`; when `false`, no exception is thrown and the binding update silently fails. |
+| `ThrowWhenPropertyIsMissing` | `bool` | `true` | When `true`, an `ArgumentNullException` is thrown by the update method when `Property` doesn't exist on the attached object; when `false`, no exception is thrown and the binding update silently fails. |
 
 ### `IntervalCallback`
 
