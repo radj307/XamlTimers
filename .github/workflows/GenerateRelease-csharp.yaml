@@ -51,7 +51,7 @@ jobs:
           if-no-files-found: error
           
       - name:   Upload SDK NuGet Packages
-        run:    foreach ($pkg in $(Get-ChildItem -Filter *.nupkg)) { dotnet nuget push $pkg.Name -k ${{ github.token }} -s https://nuget.pkg.github.com/radj307/index.json --skip-duplicate ; dotnet nuget push $pkg.Name -k ${{ secrets.NUGET_API_KEY_UPDATEBINDINGONINTERVAL }} -s https://api.nuget.org/v3/index.json --skip-duplicate }
+        run:    foreach ($pkg in $(Get-ChildItem -Filter *.nupkg)) { dotnet nuget push $pkg.Name -k ${{ github.token }} -s https://nuget.pkg.github.com/radj307/index.json --skip-duplicate ; dotnet nuget push $pkg.Name -k ${{ secrets.NUGET_API_KEY_XAMLTIMERS }} -s https://api.nuget.org/v3/index.json --skip-duplicate }
      
 
   # Create the release using the uploaded artifact on github:
