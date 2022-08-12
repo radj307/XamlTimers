@@ -41,7 +41,7 @@ jobs:
         run:    dotnet nuget add source --username radj307 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/radj307/index.json"
         
       - name:   Pack NuGet Package
-        run:    dotnet pack ./UpdateBindingOnInterval.csproj --noLogo -c Release -o . --include-symbols
+        run:    dotnet pack ./XamlTimers.csproj --noLogo -c Release -o . --include-symbols
 
       - name:   Upload Artifact
         uses:   actions/upload-artifact@v3

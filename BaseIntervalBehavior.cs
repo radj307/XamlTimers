@@ -3,17 +3,15 @@
 namespace UpdateBindingOnInterval
 {
     /// <summary>
-    /// Behaviour that executes a configurable callback function on an interval.
+    /// <see langword="abstract"/> base of the <see cref="IntervalCallback"/> &amp; <see cref="IntervalUpdateBinding"/> behaviors.
     /// </summary>
-    /// <remarks><b>This is based on <see href="https://stackoverflow.com/a/44253691/8705305">this stackoverflow answer</see>.</b></remarks>
-    public class BindingIntervalCallbackBehavior : Microsoft.Xaml.Behaviors.Behavior<DependencyObject>
+    public abstract class BaseIntervalBehavior : Microsoft.Xaml.Behaviors.Behavior<DependencyObject>
     {
-        #region DependencyProperties
         #region IntervalProperty
         // change the timer's update interval to the new value of IntervalProperty
         private static void OnIntervalPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
-            if (dependencyObject is BindingIntervalCallbackBehavior behaviour && behaviour._timer is not null)
+            if (dependencyObject is BaseIntervalBehavior behaviour && behaviour._timer is not null)
                 behaviour._timer.Interval = GetInterval(dependencyObject);
         }
 
@@ -22,7 +20,7 @@ namespace UpdateBindingOnInterval
             = DependencyProperty.Register(
                 nameof(Interval),
                 typeof(double),
-                typeof(BindingIntervalCallbackBehavior),
+                typeof(BaseIntervalBehavior),
                 new PropertyMetadata((double)Timeout.Infinite, OnIntervalPropertyChanged));
 
         /// <summary>
@@ -52,7 +50,7 @@ namespace UpdateBindingOnInterval
         // enable or disable the timer depending on the new value of EnableTimerProperty; this is triggered from both the non-static EnableTimer property and from databindings
         private static void OnEnableTimerPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
-            if (dependencyObject is BindingIntervalCallbackBehavior behaviour && behaviour._timer is not null)
+            if (dependencyObject is BaseIntervalBehavior behaviour && behaviour._timer is not null)
             {
                 behaviour._timer.Enabled = GetEnableTimer(dependencyObject);
             }
@@ -65,7 +63,7 @@ namespace UpdateBindingOnInterval
             = DependencyProperty.Register(
                 nameof(EnableTimer),
                 typeof(bool),
-                typeof(BindingIntervalCallbackBehavior),
+                typeof(BaseIntervalBehavior),
                 new PropertyMetadata(true, OnEnableTimerPropertyChanged));
 
         /// <summary>
@@ -92,48 +90,6 @@ namespace UpdateBindingOnInterval
         }
         #endregion EnableTimerProperty
 
-        #region TimerCallbackProperty
-        private static void OnTimerCallbackPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
-        {
-            if (dependencyObject is BindingIntervalCallbackBehavior behavior)
-                behavior._timerCallback = (System.Timers.ElapsedEventHandler)e.NewValue;
-        }
-
-        /// <summary>
-        /// <see cref="DependencyProperty"/> definition for the <see cref="TimerCallback"/> property.
-        /// </summary>
-        public static readonly DependencyProperty TimerCallbackProperty 
-            = DependencyProperty.Register(
-                nameof(TimerCallback), 
-                typeof(System.Timers.ElapsedEventHandler), 
-                typeof(BindingIntervalCallbackBehavior), 
-                new PropertyMetadata(null, OnTimerCallbackPropertyChanged));
-
-        /// <summary>
-        /// Gets the value of <see cref="EnableTimerProperty"/>.
-        /// </summary>
-        /// <param name="o"><see cref="DependencyObject"/> instance.</param>
-        /// <returns><see cref="System.Timers.ElapsedEventHandler"/></returns>
-        public static System.Timers.ElapsedEventHandler? GetTimerCallback(DependencyObject o) => (System.Timers.ElapsedEventHandler?)o.GetValue(TimerCallbackProperty);
-
-        /// <summary>
-        /// Sets the value of <see cref="TimerCallbackProperty"/> to <paramref name="callback"/>.
-        /// </summary>
-        /// <param name="o"><see cref="DependencyObject"/> instance.</param>
-        /// <param name="callback">A callback <see langword="delegate"/> of type <see cref="System.Timers.ElapsedEventHandler"/>.<br/>See <see cref="System.Timers.Timer.Elapsed"/></param>
-        public static void SetTimerCallback(DependencyObject o, System.Timers.ElapsedEventHandler? callback) => o.SetValue(TimerCallbackProperty, callback);
-
-        /// <summary>
-        /// Gets or sets the timer callback method.
-        /// </summary>
-        public System.Timers.ElapsedEventHandler? TimerCallback
-        {
-            get => GetTimerCallback(this);
-            set => SetTimerCallback(this, value);
-        }
-        #endregion TimerCallbackProperty
-        #endregion DependencyProperties
-
         #region Fields
         private System.Timers.Timer? _timer;
         private System.Timers.ElapsedEventHandler? _timerCallback;
@@ -159,6 +115,11 @@ namespace UpdateBindingOnInterval
         /// </summary>
         /// <returns><see langword="true"/> when the timer has been initialized; otherwise <see langword="false"/>.</returns>
         protected bool TimerIsNull() => _timer is null;
+        /// <summary>
+        /// Sets the timer callback to trigger when the timer interval has elapsed.
+        /// </summary>
+        /// <param name="callback">A <see cref="System.Timers.ElapsedEventHandler"/> delegate to use as the callback method.</param>
+        protected void SetTimerCallback(System.Timers.ElapsedEventHandler? callback) => _timerCallback = callback;
 
         /// <inheritdoc/>
         protected override void OnAttached()
@@ -178,7 +139,7 @@ namespace UpdateBindingOnInterval
         protected override void OnDetaching()
         {
             _timer?.Dispose();
-            this.TimerCallback = null;
+            _timerCallback = null;
             base.OnDetaching();
         }
         #endregion EventHandlers
