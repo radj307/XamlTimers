@@ -1,4 +1,4 @@
-﻿namespace UpdateBindingOnInterval
+﻿namespace XamlTimers
 {
     /// <summary>
     /// Binding update mode definitions

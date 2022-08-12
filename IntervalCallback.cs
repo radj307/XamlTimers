@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace UpdateBindingOnInterval
+namespace XamlTimers
 {
     /// <summary>
     /// Behaviour that executes a configurable callback function on an interval.
@@ -17,11 +17,11 @@ namespace UpdateBindingOnInterval
         /// <summary>
         /// <see cref="DependencyProperty"/> definition for the <see cref="TimerCallback"/> property.
         /// </summary>
-        public static readonly DependencyProperty TimerCallbackProperty 
+        public static readonly DependencyProperty TimerCallbackProperty
             = DependencyProperty.Register(
-                nameof(TimerCallback), 
-                typeof(System.Timers.ElapsedEventHandler), 
-                typeof(IntervalCallback), 
+                nameof(TimerCallback),
+                typeof(System.Timers.ElapsedEventHandler),
+                typeof(IntervalCallback),
                 new PropertyMetadata(null, OnTimerCallbackPropertyChanged));
 
         /// <summary>

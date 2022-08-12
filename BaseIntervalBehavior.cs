@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace UpdateBindingOnInterval
+namespace XamlTimers
 {
     /// <summary>
     /// <see langword="abstract"/> base of the <see cref="IntervalCallback"/> &amp; <see cref="IntervalUpdateBinding"/> behaviors.
@@ -51,9 +51,7 @@ namespace UpdateBindingOnInterval
         private static void OnEnableTimerPropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
             if (dependencyObject is BaseIntervalBehavior behaviour && behaviour._timer is not null)
-            {
                 behaviour._timer.Enabled = GetEnableTimer(dependencyObject);
-            }
         }
 
         /// <summary>

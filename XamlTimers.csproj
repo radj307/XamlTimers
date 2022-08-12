@@ -8,12 +8,12 @@
     <Authors>radj307</Authors>
     <Description> WPF behavior that updates data bindings on a timer, entirely from XAML.</Description>
     <Copyright>MIT</Copyright>
-    <PackageProjectUrl>https://github.com/radj307/UpdateBindingOnInterval</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/radj307/XamlTimers</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/radj307/UpdateBindingOnInterval</RepositoryUrl>
+    <RepositoryUrl>https://github.com/radj307/XamlTimers</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>wpf;behavior;wpf-behavior;binding;data-binding;databinding;update-databinding;net6;netcore6;dotnet;dotnet6</PackageTags>
-    <PackageReleaseNotes>See https://github.com/radj307/UpdateBindingOnInterval/commits/main for the full changelog.</PackageReleaseNotes>
+    <PackageReleaseNotes>See https://github.com/radj307/XamlTimers/commits/main for the full changelog.</PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>

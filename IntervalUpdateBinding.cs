@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace UpdateBindingOnInterval
+namespace XamlTimers
 {
     /// <summary>
     /// Behaviour that updates a specified dependency property's data binding on an interval.
