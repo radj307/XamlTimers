@@ -3,7 +3,7 @@
 namespace XamlTimers
 {
     /// <summary>
-    /// <see langword="abstract"/> base of the <see cref="IntervalCallback"/> &amp; <see cref="IntervalUpdateBinding"/> behaviors.
+    /// <see langword="abstract"/> base of the <see cref="IntervalCallbackBehavior"/> &amp; <see cref="IntervalUpdateBinding"/> behaviors.
     /// </summary>
     public abstract class BaseIntervalBehavior : Microsoft.Xaml.Behaviors.Behavior<DependencyObject>
     {
@@ -88,6 +88,42 @@ namespace XamlTimers
         }
         #endregion EnableTimerProperty
 
+        #region IsEventSenderAssociatedObjectProperty
+        /// <summary>
+        /// <see cref="DependencyProperty"/> definition for the <see cref="IsEventSenderAssociatedObject"/> property.
+        /// </summary>
+        public static readonly DependencyProperty IsEventSenderAssociatedObjectProperty 
+            = DependencyProperty.Register(
+                nameof(IsEventSenderAssociatedObject),
+                typeof(bool),
+                typeof(BaseIntervalBehavior),
+                new PropertyMetadata(false)
+                );
+
+        /// <summary>
+        /// Gets the value of <see cref="IsEventSenderAssociatedObjectProperty"/>.
+        /// </summary>
+        /// <param name="o"><see cref="DependencyObject"/> instance.</param>
+        /// <returns><see langword="true"/> when the 'sender' parameter on event callbacks triggered from this behavior is replaced with the <see cref="DependencyObject"/> that the behavior is attached to; <see langword="false"/> when the 'sender' parameter is set to the behavior instance that triggered the event.</returns>
+        public static bool GetSenderIsAttachedObject(DependencyObject o) => (bool)o.GetValue(IsEventSenderAssociatedObjectProperty);
+
+        /// <summary>
+        /// Sets the value of <see cref="IsEventSenderAssociatedObjectProperty"/> to <paramref name="state"/>.
+        /// </summary>
+        /// <param name="o"><see cref="DependencyObject"/> instance.</param>
+        /// <param name="state"><see langword="true"/> replaces the 'sender' parameter on event callbacks triggered from this behavior with the <see cref="DependencyObject"/> it is attached to; <see langword="false"/> does not replace the 'sender' parameter of events (The 'sender' parameter in this case is set to the behavior instance that triggered the event).</param>
+        public static void SetSenderIsAttachedObject(DependencyObject o, bool state) => o.SetValue(IsEventSenderAssociatedObjectProperty, state);
+
+        /// <summary>
+        /// Gets or sets whether the <see cref="TimerCallback"/>  "sender" parameter 
+        /// </summary>
+        public bool IsEventSenderAssociatedObject
+        {
+            get => GetSenderIsAttachedObject(this);
+            set => SetSenderIsAttachedObject(this, value);
+        }
+        #endregion IsEventSenderAssociatedObjectProperty
+
         #region Fields
         private System.Timers.Timer? _timer;
         private System.Timers.ElapsedEventHandler? _timerCallback;
@@ -100,7 +136,7 @@ namespace XamlTimers
                 return;
             try
             {
-                _ = this.Dispatcher.Invoke(_timerCallback, this, e);
+                _ = this.Dispatcher.Invoke(_timerCallback, IsEventSenderAssociatedObject ? AssociatedObject : this, e);
             }
             catch (TaskCanceledException) { } //< this occurs when a task is cancelled, such as when the application is shutting down.
         }
