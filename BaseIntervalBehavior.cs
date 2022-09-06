@@ -105,22 +105,22 @@ namespace XamlTimers
         /// </summary>
         /// <param name="o"><see cref="DependencyObject"/> instance.</param>
         /// <returns><see langword="true"/> when the 'sender' parameter on event callbacks triggered from this behavior is replaced with the <see cref="DependencyObject"/> that the behavior is attached to; <see langword="false"/> when the 'sender' parameter is set to the behavior instance that triggered the event.</returns>
-        public static bool GetSenderIsAttachedObject(DependencyObject o) => (bool)o.GetValue(IsEventSenderAssociatedObjectProperty);
+        public static bool GetIsEventSenderAssociatedObject(DependencyObject o) => (bool)o.GetValue(IsEventSenderAssociatedObjectProperty);
 
         /// <summary>
         /// Sets the value of <see cref="IsEventSenderAssociatedObjectProperty"/> to <paramref name="state"/>.
         /// </summary>
         /// <param name="o"><see cref="DependencyObject"/> instance.</param>
         /// <param name="state"><see langword="true"/> replaces the 'sender' parameter on event callbacks triggered from this behavior with the <see cref="DependencyObject"/> it is attached to; <see langword="false"/> does not replace the 'sender' parameter of events (The 'sender' parameter in this case is set to the behavior instance that triggered the event).</param>
-        public static void SetSenderIsAttachedObject(DependencyObject o, bool state) => o.SetValue(IsEventSenderAssociatedObjectProperty, state);
+        public static void SetIsEventSenderAssociatedObject(DependencyObject o, bool state) => o.SetValue(IsEventSenderAssociatedObjectProperty, state);
 
         /// <summary>
         /// Gets or sets whether the <see cref="TimerCallback"/>  "sender" parameter 
         /// </summary>
         public bool IsEventSenderAssociatedObject
         {
-            get => GetSenderIsAttachedObject(this);
-            set => SetSenderIsAttachedObject(this, value);
+            get => GetIsEventSenderAssociatedObject(this);
+            set => SetIsEventSenderAssociatedObject(this, value);
         }
         #endregion IsEventSenderAssociatedObjectProperty
 
@@ -136,7 +136,12 @@ namespace XamlTimers
                 return;
             try
             {
-                _ = this.Dispatcher.Invoke(_timerCallback, IsEventSenderAssociatedObject ? AssociatedObject : this, e);
+                object? sender = null;
+                this.Dispatcher.Invoke(() =>
+                {
+                    sender = IsEventSenderAssociatedObject ? AssociatedObject : this;
+                });
+                _ = this.Dispatcher.Invoke(_timerCallback, sender, e);
             }
             catch (TaskCanceledException) { } //< this occurs when a task is cancelled, such as when the application is shutting down.
         }
