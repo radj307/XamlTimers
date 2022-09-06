@@ -18,8 +18,8 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <PackageIcon>Microsoft.Xaml.Behaviors.Wpf-INVERTED.png</PackageIcon>
-    <Version>1.2.0</Version>
-    <ExtendedVersion>1.2.0</ExtendedVersion>
+    <Version>1.2.1</Version>
+    <ExtendedVersion>1.2.1</ExtendedVersion>
     <DocumentationFile>publish\XamlTimers.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
