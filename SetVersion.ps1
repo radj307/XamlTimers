@@ -1,58 +1,49 @@
-$SCRIPTVERSION = "4.1" # The version number of this script file
+# SetVersion.ps1
+#   Powershell helper script for CI scripts to update .csproj files.
+#
+# Usage:
+#   SetVersion -Path <CSPROJ_PATH> [<PROPERTY>=<VALUE>]...
+#
+# Example:
+#   SetVersion -Path MyProject/MyProject.csproj  Version=$(git describe --tags --abbrev=0)
+param(
+    [Parameter(Mandatory=$true,HelpMessage="Path to the target .csproj file.")][String]$Path="",
+    [Parameter(ValueFromRemainingArguments=$true)][String[]]$PropertySetters
+)
 
-#Set-Location -Path '..'
+# Resolve Path
+$Path = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($(Get-Location), $Path))
 
-Write-Host "Running SetVersion.ps1 $SCRIPTVERSION" # LOG
+"Reading '$Path'"
 
-if ( $args[1] )
+# Read XML file
+[xml]$CONTENT = Get-Content -Path "$Path"
+
+# doing this prevents failure when there are multiple PropertyGroup nodes:
+$TARGET_NODE = $CONTENT.SelectSingleNode("//Project/PropertyGroup")
+
+foreach ($SETTER in $PropertySetters)
 {
-    "Using Argument `"$args[1]`""
-    $global:GIT_TAG_RAW = $args[1]
-}
-else
-{
-    $global:GIT_TAG_RAW = $(git describe --tags --abbrev=0)
-    "Using Git Tag: `"$global:GIT_TAG_RAW`""
-}
+    $v = $SETTER -split "=",2
 
-"Latest Git Tag:           `"$global:GIT_TAG_RAW`""
-
-$global:GIT_TAG_RAW -cmatch '(?<MAJOR>\d+?)\.(?<MINOR>\d+?)\.(?<PATCH>\d+?)(?<EXTRA>.*)'
-
-$global:TAG = $Matches.MAJOR + '.' + $Matches.MINOR + '.' + $Matches.PATCH
-
-# @brief            Set the version number in the specified csproj file.
-# @param file       Target File Path.
-# @param version    Incoming Version Number.
-function SetVersion
-{
-    param($file)
-
-    "Reading Project File '$file'..."
-
-    [xml]$CONTENT = Get-Content -Path $file
-
-    $oldversion = $CONTENT.Project.PropertyGroup.Version
-    $oldextversion = $CONTENT.Project.PropertyGroup.ExtendedVersion
-    #$oldtype = $CONTENT.Project.PropertyGroup.ReleaseType
-
-    if ($oldversion -eq $global:TAG -and $oldextversion -eq $global:GIT_TAG_RAW -and $oldtype -eq $global:TYPE)
+    $previousValue = $TARGET_NODE."$($v[0])"
+    if ($v[1] -eq $previousValue)
     {
-        "  No changes, skipping."
-        return
+        "$($v[0]) was already set to $previousValue"
+        continue
     }
-    
-    "  Outgoing file version:  '$oldversion'`t|   '$oldextversion'"
-    "  Incoming file version:  '$global:TAG'`t|   '$global:GIT_TAG_RAW'"
 
-    $CONTENT.Project.PropertyGroup.Version = "$global:TAG"
-    $CONTENT.Project.PropertyGroup.ExtendedVersion = "$global:GIT_TAG_RAW"
-    #$CONTENT.Project.PropertyGroup.ReleaseType = "$global:TYPE"
-    $CONTENT.Save("$file")
+    # Set the property
+    $TARGET_NODE."$($v[0])" = $v[1]
+    
+    if ($previousValue.Length -eq 0) {
+        "Set $($v[0]) to $($v[1])"
+    }
+    else {
+        "Set $($v[0]) to $($v[1]) (Was $previousValue)"
+    }
 }
 
-$LOCATION = "$(Get-Location)"
+$CONTENT.Save("$Path")
 
-SetVersion("$LOCATION\XamlTimers.csproj")
-
-"SetVersion.ps1 Finished."
+"Saved '$Path'"
