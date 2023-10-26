@@ -27,5 +27,13 @@ jobs:
                 $tag_3_part = $Matches.MAJOR + '.' + $Matches.MINOR + '.' + $Matches.PATCH
                 $copyright = "Copyright © $((Get-Date).Year) by `$`(Authors`)"
                 .\SetVersion.ps1 -Path XamlTimers.csproj  Version=$tag FileVersion=$tag_3_part  Copyright=$copyright
+                
+      - name:   Push Changes
+        run:    |
+                git config user.name github-actions
+                git config user.email github-actions@github.com
+                git add -A
+                git commit -m "Update .csproj Version Numbers"
+                git push origin
         
 # HEAD:github-actions
