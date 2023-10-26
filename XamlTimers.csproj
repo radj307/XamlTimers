@@ -1,42 +1,42 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net6.0-windows</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Authors>radj307</Authors>
-		<Description> WPF behavior that updates data bindings on a timer, entirely from XAML.</Description>
-		<Copyright>Copyright © 2023 by $(Authors)</Copyright>
-		<PackageProjectUrl>https://github.com/radj307/XamlTimers</PackageProjectUrl>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<RepositoryUrl>https://github.com/radj307/XamlTimers</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>wpf;behavior;wpf-behavior;binding;data-binding;databinding;update-databinding;net6;netcore6;dotnet;dotnet6</PackageTags>
-		<PackageReleaseNotes>See https://github.com/radj307/XamlTimers/commits/main for the full changelog.</PackageReleaseNotes>
-		<NeutralLanguage>en</NeutralLanguage>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-		<PackageIcon>Microsoft.Xaml.Behaviors.Wpf-INVERTED.png</PackageIcon>
-		<Version>1.2.1</Version>
-		<FileVersion>1.2.1</FileVersion>
-		<DocumentationFile>publish\XamlTimers.xml</DocumentationFile>
-	</PropertyGroup>
-	<ItemGroup>
-		<None Include="README.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-		<None Include=".github\workflows\GenerateRelease-csharp.yaml" />
-		<None Include=".github\workflows\UpdateVersion.yaml" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.75" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Update="Microsoft.Xaml.Behaviors.Wpf-INVERTED.png">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>radj307</Authors>
+    <Description> WPF behavior that updates data bindings on a timer, entirely from XAML.</Description>
+    <Copyright>Copyright © 2023 by $(Authors)</Copyright>
+    <PackageProjectUrl>https://github.com/radj307/XamlTimers</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/radj307/XamlTimers</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>wpf;behavior;wpf-behavior;binding;data-binding;databinding;update-databinding;net6;netcore6;dotnet;dotnet6</PackageTags>
+    <PackageReleaseNotes>See https://github.com/radj307/XamlTimers/commits/main for the full changelog.</PackageReleaseNotes>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageIcon>Microsoft.Xaml.Behaviors.Wpf-INVERTED.png</PackageIcon>
+    <Version>1.3.0</Version>
+    <FileVersion>1.3.0</FileVersion>
+    <DocumentationFile>publish\XamlTimers.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include=".github\workflows\GenerateRelease-csharp.yaml" />
+    <None Include=".github\workflows\UpdateVersion.yaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.75" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Microsoft.Xaml.Behaviors.Wpf-INVERTED.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 </Project>
