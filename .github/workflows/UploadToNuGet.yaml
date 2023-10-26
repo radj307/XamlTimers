@@ -1,4 +1,4 @@
-name: Upload NuGet Package
+name: Generate Package
 
 on:
   workflow_run:
@@ -6,6 +6,7 @@ on:
       - 'Update Version'
     types:
       - 'completed'
+  workflow_dispatch:
 
 defaults:
   run:
@@ -17,7 +18,7 @@ env:
   BUILD_TYPE: 'Release'
 
 jobs:
-  build-release: # Only run on successful version update action
+  build-and-upload-package: # Only run on successful version update action
     runs-on:  windows-latest
     if:       ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
@@ -27,49 +28,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref:          '${{ github.ref }}'
           fetch-depth:  0
 
       - uses: actions/setup-dotnet@main
         with:
           dotnet-version:   6.0.x
-
+         
       - name:   Build
-        run:    dotnet build ./XamlTimers.sln -c Release
-
+        run:    dotnet build -c Release
+        
       - name:   Authenticate with Github NuGet Package Registry
         run:    dotnet nuget add source --username radj307 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/radj307/index.json"
-        
+
       - name:   Pack NuGet Package
         run:    dotnet pack ./XamlTimers.csproj --noLogo -c Release -o . --include-symbols
-
-      - name:   Upload Artifact
-        uses:   actions/upload-artifact@v3
-        with:
-          name: package
-          path: '*.nupkg'
-          if-no-files-found: error
-          
-      - name:   Upload NuGet Packages
+        
+      - name:   Upload NuGet Package
         run:    foreach ($pkg in $(Get-ChildItem -Filter *.nupkg)) { dotnet nuget push $pkg.Name -k ${{ github.token }} -s https://nuget.pkg.github.com/radj307/index.json --skip-duplicate ; dotnet nuget push $pkg.Name -k ${{ secrets.NUGET_API_KEY_XAMLTIMERS }} -s https://api.nuget.org/v3/index.json --skip-duplicate }
-     
-
-  # Create the release using the uploaded artifact on github:
-  create-release:
-    needs:    build-release
-    runs-on:  ubuntu-latest
-
-    steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          path:  ${{github.workspace}}
-
-      - run:  ls -lAghR
-
-      - name: 'Create Release'
-        uses: softprops/action-gh-release@v1
-        with:
-          draft:      true
-          files:      |
-                      ${{github.workspace}}/package/*
