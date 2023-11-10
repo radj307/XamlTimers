@@ -40,6 +40,8 @@ xmlns:behavior="clr-namespace:XamlTimers;assembly=XamlTimers"
 | `ThrowWhenPropertyIsNull` | `bool` | `true` | When `true`, an `ArgumentNullException` is thrown by the update method when `Property` is `null`; when `false`, no exception is thrown and the binding update silently fails. |
 | `ThrowWhenPropertyIsMissing` | `bool` | `true` | When `true`, an `ArgumentNullException` is thrown by the update method when `Property` doesn't exist on the attached object; when `false`, no exception is thrown and the binding update silently fails. |
 
+### `IntervalCallback`
+
 #### Properties
 
 | Property        | Default | Description |
